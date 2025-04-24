@@ -3,7 +3,7 @@ import { ShedulesService } from './shedules.service';
 import { ShedulesController } from './shedules.controller';
 
 @Module({
-  controllers: [ShedulesController],
-  providers: [ShedulesService],
+    controllers: [ShedulesController],
+    providers: [ShedulesService],
 })
 export class ShedulesModule {}

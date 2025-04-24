@@ -1,26 +1,39 @@
-import { Injectable } from '@nestjs/common';
-import { CreateOperationDto } from './dto/create-operation.dto';
-import { UpdateOperationDto } from './dto/update-operation.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateOperationDtoType } from './dto/create-operation.dto';
+import { UpdateOperationDtoType } from './dto/update-operation.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class OperationsService {
-  create(createOperationDto: CreateOperationDto) {
-    return 'This action adds a new operation';
-  }
+    constructor(private prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all operations`;
-  }
+    create(dto: CreateOperationDtoType) {
+        return this.prisma.operation.create({ data: dto });
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} operation`;
-  }
+    findAll() {
+        return this.prisma.operation.findMany();
+    }
 
-  update(id: number, updateOperationDto: UpdateOperationDto) {
-    return `This action updates a #${id} operation`;
-  }
+    async findOne(id: number) {
+        const operation = await this.prisma.operation.findUnique({
+            where: { id },
+        });
+        if (!operation)
+            throw new NotFoundException(`Operation #${id} not found`);
+        return operation;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} operation`;
-  }
+    async update(id: number, updateOperationDto: UpdateOperationDtoType) {
+        await this.findOne(id);
+        return this.prisma.operation.update({
+            where: { id },
+            data: updateOperationDto,
+        });
+    }
+
+    async remove(id: number) {
+        await this.findOne(id);
+        return this.prisma.operation.delete({ where: { id } });
+    }
 }

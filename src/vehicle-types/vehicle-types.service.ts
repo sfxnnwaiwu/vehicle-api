@@ -2,21 +2,20 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateVehicleTypeDtoType } from './dto/create-vehicle-type.dto';
 import { UpdateVehicleTypeDtoType } from './dto/update-vehicle-type.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { VehicleType } from './entities/vehicle-type.entity';
 
 @Injectable()
 export class VehicleTypesService {
     constructor(private readonly prisma: PrismaService) {}
 
-    create(dto: CreateVehicleTypeDtoType): Promise<VehicleType> {
+    create(dto: CreateVehicleTypeDtoType): Promise<any> {
         return this.prisma.vehicleType.create({ data: dto });
     }
 
-    findAll(): Promise<VehicleType> {
+    findAll(): Promise<any> {
         return this.prisma.vehicleType.findMany();
     }
 
-    findOne(id: number): Promise<VehicleType> {
+    async findOne(id: number): Promise<any> {
         const vehicleType = await this.prisma.vehicleType.findUnique({
             where: { id },
         });

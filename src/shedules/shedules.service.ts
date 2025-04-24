@@ -1,26 +1,38 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSheduleDto } from './dto/create-shedule.dto';
-import { UpdateSheduleDto } from './dto/update-shedule.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateSheduleDtoType } from './dto/create-shedule.dto';
+import { UpdateSheduleDtoType } from './dto/update-shedule.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class ShedulesService {
-  create(createSheduleDto: CreateSheduleDto) {
-    return 'This action adds a new shedule';
-  }
+    constructor(private readonly prisma: PrismaService) {}
 
-  findAll() {
-    return `This action returns all shedules`;
-  }
+    create(dto: CreateSheduleDtoType) {
+        return this.prisma.schedule.create({ data: dto });
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} shedule`;
-  }
+    findAll() {
+        return this.prisma.schedule.findMany();
+    }
 
-  update(id: number, updateSheduleDto: UpdateSheduleDto) {
-    return `This action updates a #${id} shedule`;
-  }
+    async findOne(id: number) {
+        const shedule = await this.prisma.schedule.findUnique({
+            where: { id },
+        });
 
-  remove(id: number) {
-    return `This action removes a #${id} shedule`;
-  }
+        if (!shedule)
+            throw new NotFoundException(`VehicleType #${id} not found`);
+
+        return shedule;
+    }
+
+    async update(id: number, dto: UpdateSheduleDtoType) {
+        await this.findOne(id);
+        return this.prisma.schedule.update({ where: { id }, data: dto });
+    }
+
+    async remove(id: number) {
+        await this.findOne(id);
+        return this.prisma.schedule.delete({ where: { id } });
+    }
 }

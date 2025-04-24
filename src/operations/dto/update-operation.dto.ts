@@ -1,4 +1,9 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateOperationDto } from './create-operation.dto';
+import { z } from 'zod';
 
-export class UpdateOperationDto extends PartialType(CreateOperationDto) {}
+export const UpdateOperationDto = z.object({
+    name: z.string().min(1).optional(),
+    vehicleTypeId: z.number().int().optional(),
+    quantity: z.number().int().optional(),
+});
+
+export type UpdateOperationDtoType = z.infer<typeof UpdateOperationDto>;

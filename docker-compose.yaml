@@ -9,9 +9,10 @@ services:
             - .env
     db:
         image: postgres:13
+        restart: always
         env_file:
             - .env
         volumes:
-            - db_data:/var/lib/postgresql/data
+            - postgres:/var/lib/postgresql/data
 volumes:
-    db_data:
+    postgres:

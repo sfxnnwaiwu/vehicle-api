@@ -38,8 +38,8 @@ model Schedule {
   vehicleTypeId  Int
   source         String
   destination    String
-  duration       Int         // in minutes
-  distance       Float       // in kilometers
+  duration       Int        
+  distance       Float      
   vehicleType    VehicleType @relation(fields: [vehicleTypeId], references: [id])
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt

@@ -24,11 +24,11 @@ export class OperationsService {
         return operation;
     }
 
-    async update(id: number, updateOperationDto: UpdateOperationDtoType) {
+    async update(id: number, dto: UpdateOperationDtoType) {
         await this.findOne(id);
         return this.prisma.operation.update({
             where: { id },
-            data: updateOperationDto,
+            data: dto,
         });
     }
 
